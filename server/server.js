@@ -1,7 +1,8 @@
 //imports
 const dotenv = require("dotenv");
 const express = require("express");
-const cors = require("cors");
+const cors = require("cors")
+const connectDb = require('./config/db')
 
 
 //configurations
@@ -16,9 +17,10 @@ app.use(express.json())
 const mongoDbUri = process.env.MONGO_URI;
 
 const PORT = process.env.PORT
-
+//connect to db
+connectDb(mongoDbUri);
 //giving feedback
-app.listen(()=>{
+app.listen(PORT,()=>{
     console.log(`server is running at port ${PORT}.`)
 })
 
