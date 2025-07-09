@@ -1,6 +1,6 @@
 //imports
-const express = require("express");
 const dotenv = require("dotenv");
+const express = require("express");
 const cors = require("cors");
 
 
@@ -13,8 +13,9 @@ app.use(express.json())
 
 
 //simple  test constants
-const PORT = 5000
+const mongoDbUri = process.env.MONGO_URI;
 
+const PORT = process.env.PORT
 
 //giving feedback
 app.listen(()=>{
