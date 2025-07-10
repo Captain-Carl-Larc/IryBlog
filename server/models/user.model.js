@@ -14,21 +14,21 @@ const UserSchema = new mongoose.Schema(
       trim: true,
     },
     email: {
-      type: string,
+      type: String,
       unique: true,
       trim: true,
       required: true,
       match: [/.+@.+\..+/, "Please fill a valid email address"], // Basic email validation
     },
-    userName: {
-      type: string,
+    username: {
+      type: String,
       unique: true,
       trim: true,
       required: true,
     },
     password: {
       required: true,
-      type: string,
+      type: String,
       minlength: 6,
     },
   },
@@ -54,8 +54,8 @@ UserSchema.pre("save", async function (next) {
 });
 
 // --- Method to compare password for login ---
-userschema.methods.matchPassword = async function (enteredPassword) {
-  return await bcrypt.compare(enteredPassword,this.password)
-}
+UserSchema.methods.matchPassword = async function (enteredPassword) {
+  return await bcrypt.compare(enteredPassword, this.password);
+};
 
 module.exports = mongoose.model("User", UserSchema);
