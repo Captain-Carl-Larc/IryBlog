@@ -56,7 +56,45 @@ const registerUser = async (req, res) => {
 };
 
 //login user
+const loginUser = async (req, res) => {
+  const { email, password } = req.body;
 
+  //validate
+  if (!email || !password) {
+    return res.status(400).json({
+      message: `Please fill in the login details.`,
+    });
+  }
+
+  //initiate login  by password comparison
+  try {
+    //check if user exists
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({
+        message: `user with email ${email} could not be found!`,
+      });
+    }
+
+    //otherwise if user exists compare password
+    const isMatch = await user.matchPassword(password);
+
+    if (isMatch) {
+      res.status(200).json({
+        message: `login for ${email} was successful`,
+        userId: user._id,
+        email: user.email,
+      });
+    } else {
+      res.status(401).json({ message: `invalid login credentials` });
+    }
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({
+      message: `we could not login ${email} due to ${error.message}`,
+    });
+  }
+};
 
 //get all users (for testing purposes)
 const getAllUsers = async (req,res) => {
