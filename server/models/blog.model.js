@@ -10,10 +10,10 @@ const blogSchema = new mongoose.Schema(
     },
     description: {
       required: true,
-      type: string,
+      type: String,
     },
     content: {
-      type: string,
+      type: String,
       required: true,
       minlength: 50,
     },
@@ -28,4 +28,4 @@ const blogSchema = new mongoose.Schema(
   }
 );
 
-modules.export = blogSchema
+module.exports = mongoose.model("Blog", blogSchema);
