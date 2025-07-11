@@ -1,5 +1,16 @@
 const User = require("../models/user.model");
+const jwt = require('jsonwebtoken')
 
+
+//token generation for auth
+
+const generateToken = (id)=>{
+  const jwtKey = process.env.JWT_KEY;
+  const jwtExpiry = process.env.JWT_EXPIRE;
+  return jwt.sign({ id }, jwtKey, {
+    expiresIn:jwtExpiry
+  });
+}
 //register user
 
 const registerUser = async (req, res) => {
@@ -41,6 +52,7 @@ const registerUser = async (req, res) => {
         userId: user._id,
         email: user.email,
         username: user.username,
+        token: generateToken(user._id),
       });
     } else {
       res.status(500).json({
@@ -84,6 +96,7 @@ const loginUser = async (req, res) => {
         message: `login for ${email} was successful`,
         userId: user._id,
         email: user.email,
+        token: generateToken(user._id),
       });
     } else {
       res.status(401).json({ message: `invalid login credentials` });
