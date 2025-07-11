@@ -4,6 +4,7 @@ const dotenv = require("dotenv");
 const connectDb = require("./config/db");
 const cors = require("cors");
 const userRoutes = require("./routes/userRoute"); // Import your user routes
+const blogRoutes = require('./routes/blogRoute')
 
 // Load environment variables
 dotenv.config();
@@ -18,6 +19,9 @@ app.use(cors()); // Enable CORS for all routes (you might want to configure this
 // --- API Routes ---
 // Mount the user routes under the /api/users path
 app.use("/api/users", userRoutes);
+
+//mount blog routes
+app.use('/api/posts',blogRoutes)
 
 // Simple test route
 app.get("/", (req, res) => {
