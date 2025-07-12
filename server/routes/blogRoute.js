@@ -1,5 +1,9 @@
 const express = require('express')
-const { createBlog, getAllPosts } = require("../controllers/blog.controller");
+const {
+  createBlog,
+  getAllPosts,
+  getSinglePost,
+} = require("../controllers/blog.controller");
 const {protect} = require('../middleware/authmiddleware')
 
 const router = express.Router()
@@ -10,5 +14,8 @@ router.post("/create",protect, createBlog);
 
 //route to get all posts
 router.get("/",protect, getAllPosts);
+
+//route to get post by id
+router.get("/:id", protect, getSinglePost);
 
 module.exports = router
