@@ -47,10 +47,14 @@ const createBlog = async (req, res) => {
 //fetch all posts
 const getAllPosts = async (req, res) =>{
   try {
-    const posts = await Blog.find({})
+    const posts = await Blog.find({}).populate(
+      "author",
+      "username email"
+    );
     if(posts === 0){
       return res.status(404).json({
-        message:`could not find any posts`
+        message:`could not find any posts`,
+        posts:[]
       })
     }
     return res.status(200).json(posts)
