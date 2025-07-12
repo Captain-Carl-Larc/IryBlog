@@ -44,4 +44,23 @@ const createBlog = async (req, res) => {
   }
 };
 
-module.exports = { createBlog };
+//fetch all posts
+const getAllPosts = async (req, res) =>{
+  try {
+    const posts = await Blog.find({})
+    if(posts === 0){
+      return res.status(404).json({
+        message:`could not find any posts`
+      })
+    }
+    return res.status(200).json(posts)
+  } catch (error) {
+    console.error(error.message)
+    return res.status(500).json({
+      message:`could not fetch posts due to ${
+      error.message}`
+    })
+  }
+}
+
+module.exports = { createBlog, getAllPosts };
