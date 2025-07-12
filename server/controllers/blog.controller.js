@@ -1,5 +1,5 @@
 const Blog = require("../models/blog.model");
-const mongoose = require('mongoose')
+const mongoose = require("mongoose");
 
 //create a post
 
@@ -45,26 +45,52 @@ const createBlog = async (req, res) => {
 };
 
 //fetch all posts
-const getAllPosts = async (req, res) =>{
+const getAllPosts = async (req, res) => {
   try {
-    const posts = await Blog.find({}).populate(
-      "author",
-      "username email"
-    );
-    if(posts === 0){
+    const posts = await Blog.find({}).populate("author", "username email");
+    if (posts === 0) {
       return res.status(404).json({
-        message:`could not find any posts`,
-        posts:[]
+        message: `could not find any posts`,
+        posts: [],
+      });
+    }
+    return res.status(200).json(posts);
+  } catch (error) {
+    console.error(error.message);
+    return res.status(500).json({
+      message: `could not fetch posts due to ${error.message}`,
+    });
+  }
+};
+
+const getSinglePost = async (req, res) => {
+  //get posts id
+  const postId = req.params.id;
+
+  //check id validity
+  if (!mongoose.Types.ObjectId.isValid(postId)) {
+    return res.status(400).json({
+      message: `The post id is invalid`,
+    });
+  }
+
+  //
+  try {
+    const post = await Blog.findById(postId).populate("author", "username");
+
+    if(!post){
+      return res.status(404).json({
+        message:`could not find posts with id ${postId}`
       })
     }
-    return res.status(200).json(posts)
-  } catch (error) {
-    console.error(error.message)
-    return res.status(500).json({
-      message:`could not fetch posts due to ${
-      error.message}`
-    })
-  }
-}
 
-module.exports = { createBlog, getAllPosts };
+    //return the found post
+    return res.status(200).json(post)
+  } catch (error) {
+    console.error(error.message);
+    return res.status(500).json({
+      message: `an error occured when fetching posts ${error.message}`,
+    });
+  }
+};
+module.exports = { createBlog, getAllPosts, getSinglePost };
