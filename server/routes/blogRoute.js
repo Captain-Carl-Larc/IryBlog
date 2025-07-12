@@ -4,6 +4,7 @@ const {
   getAllPosts,
   getSinglePost,
   getPostsOfUser,
+  getOwnPosts,
 } = require("../controllers/blog.controller");
 const {protect} = require('../middleware/authmiddleware')
 
@@ -16,10 +17,16 @@ router.post("/create",protect, createBlog);
 //route to get all posts
 router.get("/",protect, getAllPosts);
 
-//route to get post by id
-router.get("/:postId", protect, getSinglePost);
+//get loggenin userposts
+router.get("/author", protect, getOwnPosts);
+
 
 //get post by user id
 router.get("/author/:authorId", protect, getPostsOfUser);
+
+//route to get post by id
+router.get("/:postId", protect, getSinglePost);
+
+
 
 module.exports = router
