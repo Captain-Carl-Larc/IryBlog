@@ -95,7 +95,7 @@ const getSinglePost = async (req, res) => {
 };
 
 //get posts of a specific user
-const getPostsOfUser =  async (req,res) => {
+const getPostsOfUser = async (req, res) => {
   //get user id
   const userId = req.params.authorId;
 
@@ -105,16 +105,57 @@ const getPostsOfUser =  async (req,res) => {
       message: `the id ${userId} is invalid`,
     });
   }
-//get posts
-  const posts = await Blog.find({author:userId}).populate('author','username email')
+  //get posts
+  const posts = await Blog.find({ author: userId }).populate(
+    "author",
+    "username email"
+  );
 
-  if(posts.length === 0){
+  if (posts.length === 0) {
     return res.status(404).json({
-      message:`no posts for this user were found`,
-      posts:[]
-    })
+      message: `no posts for this user were found`,
+      posts: [],
+    });
   }
 
-  return res.status(200).json(posts)
+  return res.status(200).json(posts);
 };
-module.exports = { createBlog, getAllPosts, getSinglePost, getPostsOfUser };
+
+//get users all posts
+const getOwnPosts = async (req, res) => {
+  //get user Id
+  const userId = req.user._id;
+
+  //validate id
+  if (!mongoose.Types.ObjectId.isValid(userId)) {
+    return res.status(400).json({
+      message: `user id ${userId} is invalid`,
+    });
+  }
+
+  try {
+    const posts = await Blog.find({
+      author: userId,
+    }).populate("author", "username email");
+
+    if(posts.length === 0){
+      return res.status(404).json({
+        message:`No posts were found`,
+        posts:[]
+      })
+    }
+    return res.status(200).json(posts)
+  } catch (error) {
+    console.error(error.message);
+    return res.status(500).json({
+      message: `could not get posts for ${userId} due to ${error.message}.`,
+    });
+  }
+};
+module.exports = {
+  createBlog,
+  getAllPosts,
+  getSinglePost,
+  getPostsOfUser,
+  getOwnPosts,
+};
