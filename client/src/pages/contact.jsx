@@ -1,9 +1,9 @@
-function contact() {
+function Contact() {
     return ( <>
         <h1 className="font-black">
-            contact page
+            Contact page
         </h1>
     </> );
 }
 
-export default contact;
+export default Contact;

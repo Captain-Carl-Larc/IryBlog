@@ -1,9 +1,9 @@
-function home() {
+function Home() {
     return ( <>
         <h1 className="font-black">
-            home page here
+            Home page here
         </h1>
     </> );
 }
 
-export default home;
+export default Home;

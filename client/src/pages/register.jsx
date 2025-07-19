@@ -1,9 +1,9 @@
-function register() {
+function Register() {
     return ( <>
         <h1 className="font-black">
-            register page
+            Register page
         </h1>
     </> );
 }
 
-export default register;
+export default Register;

@@ -1,4 +1,4 @@
-function login() {
+function Login() {
     return ( <>
         <h1 className="font-black">
             login page
@@ -6,4 +6,4 @@ function login() {
     </> );
 }
 
-export default login;
+export default Login;

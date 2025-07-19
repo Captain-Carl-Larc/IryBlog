@@ -1,12 +1,12 @@
-function blogItem() {
+function Blog() {
     return ( <>
         <h1 className="font-black text-blue-600 text-4xl">
-            Individual blog page
+            Individual Blog page
         </h1>
         <p>
-            page to read blog details
+            page to read Blog details
         </p>
     </> );
 }
 
-export default blogItem;
+export default Blog;

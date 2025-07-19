@@ -1,4 +1,4 @@
-function Blogspage() {
+function Blogs() {
     return ( <>
         <h1 className="font-black text-5xl">
             all blogs page
@@ -6,4 +6,4 @@ function Blogspage() {
     </> );
 }
 
-export default Blogspage;
+export default Blogs;
