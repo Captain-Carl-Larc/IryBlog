@@ -5,6 +5,7 @@ const {
   getSinglePost,
   getPostsOfUser,
   getOwnPosts,
+  updatePost,
 } = require("../controllers/blog.controller");
 const {protect} = require('../middleware/authmiddleware')
 
@@ -28,6 +29,7 @@ router.get("/author/:authorId", protect, getPostsOfUser);
 //route to get post by id
 router.get("/:postId", protect, getSinglePost);
 
-
+//update post
+router.put("/:postId", protect, updatePost);
 
 module.exports = router
