@@ -1,6 +1,38 @@
+import { useState } from "react";
+
 function Register() {
+  //data states
+  const [email, setEmail] = useState("");
+  const [userName, setUserName] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmpassword, setConfirmpassword] = useState("");
+
+  //feedback states
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+  const [loading, setLoading] = useState(false);
+
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    //set states
+    setError('')
+    setSuccess('')
+    setLoading(true)
+
+    //validate inputs
+    if(!password.trim()===confirmpassword.trim()) {
+        setError('passwords do not match')
+        setLoading(false)
+        setSuccess('')
+        return
+    }
+
+    if(password.length<6){
+        setError('password should be at least 6 digits')
+        setLoading(false)
+        return
+    }
     console.log("Form submitted");
   };
 
