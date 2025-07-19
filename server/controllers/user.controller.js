@@ -64,7 +64,7 @@ const loginUser = async (req, res) => {
   const { email, password } = req.body;
 
   //validate
-  if (!email || !password) {
+  if (email.trim() === "" || password.trim() === "") {
     return res.status(400).json({
       message: `Please fill in the login details.`,
     });
