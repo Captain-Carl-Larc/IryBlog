@@ -18,7 +18,7 @@ router.post("/create",protect, createBlog);
 //route to get all posts
 router.get("/",protect, getAllPosts);
 
-//get loggenin userposts
+//get loggenin user posts
 router.get("/author", protect, getOwnPosts);
 
 
