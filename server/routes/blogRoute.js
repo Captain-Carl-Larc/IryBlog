@@ -6,6 +6,7 @@ const {
   getPostsOfUser,
   getOwnPosts,
   updatePost,
+  deletePost,
 } = require("../controllers/blog.controller");
 const {protect} = require('../middleware/authmiddleware')
 
@@ -31,5 +32,8 @@ router.get("/:postId", protect, getSinglePost);
 
 //update post
 router.put("/:postId", protect, updatePost);
+
+//delete post
+router.delete("/:postId", protect, deletePost);
 
 module.exports = router
