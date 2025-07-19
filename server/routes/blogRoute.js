@@ -8,6 +8,7 @@ const {
 } = require("../controllers/blog.controller");
 const {protect} = require('../middleware/authmiddleware')
 
+//initialize route instance
 const router = express.Router()
 
 
