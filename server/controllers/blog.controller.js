@@ -192,20 +192,70 @@ const updatePost = async (req, res) => {
       },
       { new: true, runValidators: true }
     ).populate("author", "email username");
-    if(updatedPost){
+    if (updatedPost) {
       return res.status(200).json({
-        message:`blogPost updated successfully.`,
-        updatedBlog:updatedPost
-      })
-    }else{
+        message: `blogPost updated successfully.`,
+        updatedBlog: updatedPost,
+      });
+    } else {
       return res.status(500).json({
-        message:error.message
-      })
+        message: error.message,
+      });
     }
   } catch (error) {
     console.error(error.message);
     return res.status(500).json({
       message: `could not update post due to ${error.message}`,
+    });
+  }
+};
+
+//delete post
+const deletePost = async (req, res) => {
+  const postId = req.params.postId;
+  const userId = req.user._id;
+
+  //validate postId
+  if (!mongoose.Types.ObjectId.isValid(postId)) {
+    return res.status(400).json({
+      message: `${postId} is not a valid post ID.`,
+    });
+  }
+
+  try {
+    const post = await Blog.findById(postId);
+
+    //validate post existence
+    if (!post) {
+      return res.status(404).json({
+        message: `post with id ${postId} could not be found.`,
+      });
+    }
+
+    //authorization check
+    if (post.author.toString() !== userId.toString()) {
+      return res.status(403).json({
+        message: `you are not allowed to delete this post`,
+      });
+    }
+
+    const deletedPost = await Blog.findByIdAndDelete(postId);
+
+    if (!deletedPost) {
+      return res.status(500).json({
+        message: `could not delete post`,
+      });
+    } else {
+      return res.status(200).json({
+        message: `post deleted successfuly`,
+        deletedBlog: deletedPost,
+      });
+    }
+  } catch (error) {
+    console.error(error.message);
+    return res.status(500).json({
+      message: `could not delete post`,
+      errorMsg: error.message,
     });
   }
 };
@@ -216,4 +266,5 @@ module.exports = {
   getPostsOfUser,
   getOwnPosts,
   updatePost,
+  deletePost,
 };
