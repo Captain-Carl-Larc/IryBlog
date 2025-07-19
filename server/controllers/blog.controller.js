@@ -138,13 +138,13 @@ const getOwnPosts = async (req, res) => {
       author: userId,
     }).populate("author", "username email");
 
-    if(posts.length === 0){
+    if (posts.length === 0) {
       return res.status(404).json({
-        message:`No posts were found`,
-        posts:[]
-      })
+        message: `No posts were found`,
+        posts: [],
+      });
     }
-    return res.status(200).json(posts)
+    return res.status(200).json(posts);
   } catch (error) {
     console.error(error.message);
     return res.status(500).json({
@@ -153,11 +153,62 @@ const getOwnPosts = async (req, res) => {
   }
 };
 
-
 //route to update post
-const updatePost = async (req,res) =>{
-  const {title, content} = req.body
-}
+const updatePost = async (req, res) => {
+  const { title, description, content } = req.body;
+  const userId = req.user._id;
+  const postId = req.params.postId;
+
+  //validate postId
+  if (!mongoose.Types.ObjectId.isValid(postId)) {
+    return res.status(400).json({
+      message: `${postId} is not a valid post ID.`,
+    });
+  }
+  try {
+    //find the blog post
+    const post = await Blog.findById(postId);
+
+    if (!post) {
+      return res.status(404).json({
+        message: `post with id ${postId} could not be found.`,
+      });
+    }
+
+    //check authorization
+    if (post.author.toString() !== userId.toString()) {
+      return res.status(403).json({
+        message: "you are not authorized to update this post",
+      });
+    }
+
+    //update the post
+    const updatedPost = await Blog.findByIdAndUpdate(
+      postId,
+      {
+        title,
+        description,
+        content,
+      },
+      { new: true, runValidators: true }
+    ).populate("author", "email username");
+    if(updatedPost){
+      return res.status(200).json({
+        message:`blogPost updated successfully.`,
+        updatedBlog:updatedPost
+      })
+    }else{
+      return res.status(500).json({
+        message:error.message
+      })
+    }
+  } catch (error) {
+    console.error(error.message);
+    return res.status(500).json({
+      message: `could not update post due to ${error.message}`,
+    });
+  }
+};
 module.exports = {
   createBlog,
   getAllPosts,
