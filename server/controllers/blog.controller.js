@@ -152,10 +152,17 @@ const getOwnPosts = async (req, res) => {
     });
   }
 };
+
+
+//route to update post
+const updatePost = async (req,res) =>{
+  const {title, content} = req.body
+}
 module.exports = {
   createBlog,
   getAllPosts,
   getSinglePost,
   getPostsOfUser,
   getOwnPosts,
+  updatePost,
 };
