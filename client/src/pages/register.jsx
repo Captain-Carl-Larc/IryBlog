@@ -6,7 +6,7 @@ function Register() {
 
   return (
     <div className="flex justify-center items-center bg-green-600 p-4 min-h-screen">
-      <div className="bg-white shadow-md mx-auto p-6 rounded-lg w-full max-w-md">
+      <div className="bg-white shadow-lg mx-auto p-6 rounded-lg w-full max-w-md">
         <h2 className="mb-6 font-bold text-gray-800 text-2xl text-center">
           Register
         </h2>
@@ -22,7 +22,9 @@ function Register() {
               type="email"
               name="email"
               id="email"
-              className="px-4 py-2 border-2 border-gray-300 focus:border-blue-500 rounded-md outline-none focus:ring-2 focus:ring-blue-200 text-md transition duration-200"
+              required
+              autoComplete="email"
+              className="px-4 py-2 border-2 border-gray-300 focus:border-blue-500 rounded-md outline-none focus:ring-2 focus:ring-blue-200 text-base transition duration-200"
               placeholder="Enter your email"
             />
           </div>
@@ -38,7 +40,9 @@ function Register() {
               type="text"
               name="username"
               id="username"
-              className="px-4 py-2 border-2 border-gray-300 focus:border-blue-500 rounded-md outline-none focus:ring-2 focus:ring-blue-200 text-md transition duration-200"
+              required
+              autoComplete="username"
+              className="px-4 py-2 border-2 border-gray-300 focus:border-blue-500 rounded-md outline-none focus:ring-2 focus:ring-blue-200 text-base transition duration-200"
               placeholder="Enter your username"
             />
           </div>
@@ -54,7 +58,9 @@ function Register() {
               type="password"
               name="password"
               id="password"
-              className="px-4 py-2 border-2 border-gray-300 focus:border-blue-500 rounded-md outline-none focus:ring-2 focus:ring-blue-200 text-md transition duration-200"
+              required
+              autoComplete="new-password"
+              className="px-4 py-2 border-2 border-gray-300 focus:border-blue-500 rounded-md outline-none focus:ring-2 focus:ring-blue-200 text-base transition duration-200"
               placeholder="Enter your password"
             />
           </div>
@@ -70,7 +76,9 @@ function Register() {
               type="password"
               name="confirm-password"
               id="confirm-password"
-              className="px-4 py-2 border-2 border-gray-300 focus:border-blue-500 rounded-md outline-none focus:ring-2 focus:ring-blue-200 text-md transition duration-200"
+              required
+              autoComplete="new-password"
+              className="px-4 py-2 border-2 border-gray-300 focus:border-blue-500 rounded-md outline-none focus:ring-2 focus:ring-blue-200 text-base transition duration-200"
               placeholder="Retype your password"
             />
           </div>
