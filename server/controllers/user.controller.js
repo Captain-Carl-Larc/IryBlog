@@ -1,30 +1,22 @@
 const User = require("../models/user.model");
-const jwt = require('jsonwebtoken')
-
+const jwt = require("jsonwebtoken");
 
 //token generation for auth
 
-const generateToken = (id)=>{
+const generateToken = (id) => {
   const jwtKey = process.env.JWT_KEY;
   const jwtExpiry = process.env.JWT_EXPIRE;
   return jwt.sign({ id }, jwtKey, {
-    expiresIn:jwtExpiry
+    expiresIn: jwtExpiry,
   });
-}
+};
 //register user
 
 const registerUser = async (req, res) => {
   const { username, email, password } = req.body;
 
   //check if req data is complete
-  if (
-    !username ||
-    !email ||
-    !password ||
-    username.trim() === "" ||
-    email.trim() === "" ||
-    password.trim() === ""
-  ) {
+  if (username.trim() === "" || email.trim() === "" || password.trim() === "") {
     return res.status(400).json({ message: "Please input all details!" });
   }
 
@@ -110,39 +102,37 @@ const loginUser = async (req, res) => {
 };
 
 //get all users (for testing purposes)
-const getAllUsers = async (req,res) => {
-
-    try {
-        const users = await User.find({});
-        if(!users){
-            res.status(404).json({message:"no users found"})
-        }else{
-            res.status(200).json(users)
-        }
-    } catch (error) {
-        console.erro(error.message)
-        res.status(500).json({message:"could not get users"})
+const getAllUsers = async (req, res) => {
+  try {
+    const users = await User.find({});
+    if (!users) {
+      res.status(404).json({ message: "no users found" });
+    } else {
+      res.status(200).json(users);
     }
-}
+  } catch (error) {
+    console.erro(error.message);
+    res.status(500).json({ message: "could not get users" });
+  }
+};
 
 //get user profile
-const getUserProfile = async (req,res)=>{
-  const userId = req.user.id
+const getUserProfile = async (req, res) => {
+  const userId = req.user.id;
 
-  const user = await User.findById(userId).select('-password')
+  const user = await User.findById(userId).select("-password");
 
-  if(user){
+  if (user) {
     res.status(200).json({
-      message:`user profile for ${user.username} retrieved`,
-      username:user.username,
-      userEmail:user.email
-    })
-  }else{
+      message: `user profile for ${user.username} retrieved`,
+      username: user.username,
+      userEmail: user.email,
+    });
+  } else {
     return res.status(200).json({
-      message:`user could not be found`,
-
-    })
+      message: `user could not be found`,
+    });
   }
-}
+};
 
 module.exports = { registerUser, loginUser, getAllUsers, getUserProfile };
