@@ -1,5 +1,4 @@
 // src/A
-import React from "react";
 // Import Routes and Route from react-router-dom to define your application's routes
 import { Routes, Route } from "react-router-dom";
 
