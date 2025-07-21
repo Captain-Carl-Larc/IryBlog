@@ -12,10 +12,13 @@ export const AuthContext = createContext();
 // This component will wrap your entire application (or a part of it)
 // and provide the authentication state and functions to its children.
 export const AuthProvider = ({ children }) => {
+  
   // State to hold the authenticated user's data (e.g., _id, username, email)
   const [user, setUser] = useState(null);
+  
   // State to hold the JWT token
   const [token, setToken] = useState(null);
+  
   // State to indicate if the authentication state is still being loaded (e.g., from localStorage)
   const [loading, setLoading] = useState(true);
 
@@ -66,6 +69,10 @@ export const AuthProvider = ({ children }) => {
           email: data.email,
         })
       );
+const storedUser = localStorage.getItem('user')   ;   if(user){
+        console.log(user);
+      }
+      console.log('stored user',storedUser)
       return data; // Return data for potential navigation or messages in the component
     } catch (error) {
       console.error("Login failed in AuthContext:", error);
