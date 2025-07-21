@@ -16,6 +16,7 @@ import { useAuth } from "../context/AuthContext";
  * @returns {JSX.Element} The authentication form UI.
  */
 const AuthForm = () => {
+  
   // State variables for form inputs
   const [username, setUsername] = useState(""); // Only for registration
   const [email, setEmail] = useState("");
