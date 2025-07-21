@@ -1,8 +1,8 @@
 // src/context/AuthContext.jsx
 
-import  { createContext, useState, useEffect, useContext } from 'react';
+import React, { createContext, useState, useEffect, useContext } from "react";
 // Import the API functions from your services/api.js file
-import { loginUser, registerUser } from '../services/api';
+import { loginUser, registerUser } from "../services/api";
 
 // 1. Create the AuthContext
 // This is the actual Context object that components will consume.
@@ -21,8 +21,8 @@ export const AuthProvider = ({ children }) => {
 
   // useEffect hook to run once on component mount to check for existing session in localStorage
   useEffect(() => {
-    const storedToken = localStorage.getItem('token');
-    const storedUser = localStorage.getItem('user');
+    const storedToken = localStorage.getItem("token");
+    const storedUser = localStorage.getItem("user");
 
     if (storedToken && storedUser) {
       try {
@@ -33,8 +33,8 @@ export const AuthProvider = ({ children }) => {
         // Handle cases where localStorage data might be corrupted
         console.error("Failed to parse user data from localStorage:", error);
         // Clear invalid data to prevent persistent errors
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
       }
     }
     // Set loading to false once the initial check is complete
@@ -57,11 +57,18 @@ export const AuthProvider = ({ children }) => {
       setUser({ _id: data._id, username: data.username, email: data.email });
       setToken(data.token);
       // Persist token and user info in localStorage
-      localStorage.setItem('token', data.token);
-      localStorage.setItem('user', JSON.stringify({ _id: data._id, username: data.username, email: data.email }));
+      localStorage.setItem("token", data.token);
+      localStorage.setItem(
+        "user",
+        JSON.stringify({
+          _id: data._id,
+          username: data.username,
+          email: data.email,
+        })
+      );
       return data; // Return data for potential navigation or messages in the component
     } catch (error) {
-      console.error('Login failed in AuthContext:', error);
+      console.error("Login failed in AuthContext:", error);
       throw error; // Re-throw to be handled by the component calling login (e.g., AuthForm)
     }
   };
@@ -83,11 +90,18 @@ export const AuthProvider = ({ children }) => {
       setUser({ _id: data._id, username: data.username, email: data.email });
       setToken(data.token);
       // Persist token and user info in localStorage
-      localStorage.setItem('token', data.token);
-      localStorage.setItem('user', JSON.stringify({ _id: data._id, username: data.username, email: data.email }));
+      localStorage.setItem("token", data.token);
+      localStorage.setItem(
+        "user",
+        JSON.stringify({
+          _id: data._id,
+          username: data.username,
+          email: data.email,
+        })
+      );
       return data; // Return data for potential navigation or messages in the component
     } catch (error) {
-      console.error('Registration failed in AuthContext:', error);
+      console.error("Registration failed in AuthContext:", error);
       throw error; // Re-throw to be handled by the component calling register (e.g., AuthForm)
     }
   };
@@ -99,8 +113,8 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     setUser(null);
     setToken(null);
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
   };
 
   // The value object that will be provided to all consuming components
@@ -112,20 +126,6 @@ export const AuthProvider = ({ children }) => {
     register, // Function to register
     logout, // Function to log out
     isAuthenticated: !!token, // Convenience boolean: true if token exists, false otherwise
-  };
-
-  return (
-    // Provide the authContextValue to all children components
-    <AuthContext.Provider value={authContextValue}>
-      {/* Render children only after the initial loading check is complete */}
-      {!loading ? children : <div className="flex justify-center items-center min-h-screen text-gray-600 text-xl">Loading authentication...</div>}
-    </AuthContext.Provider>
-  );
-};
-
-// 3. Custom Hook to Consume AuthContext
-// This makes it easier for components to access the context values.
-export const useAuth = () => useContext(AuthContext);
   };
 
   return (
