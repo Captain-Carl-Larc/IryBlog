@@ -72,7 +72,7 @@ const Navbar = () => {
             // If authenticated, display user's username and a logout button
             <div className="flex items-center space-x-4">
               <span className="text-white text-lg">
-                Hello, {user?.username}!
+                Hello, {user.username}!
               </span>
               <button
                 onClick={handleLogout} // Calls the logout function
