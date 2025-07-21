@@ -138,5 +138,13 @@ export const getPostsOfUser = (userId) =>
 // export const updatePost = (postId, postData) =>
 //   request(`${API_BASE_URL}/posts/${postId}`, 'PUT', postData, true);
 
+export const updatePost = (postId,postData) =>{
+  request(`${API_BASE_URL}/posts/${postId}`,'PUT',postData,true)
+}
+
 // export const deletePost = (postId) =>
 //   request(`${API_BASE_URL}/posts/${postId}`, 'DELETE', null, true);
+
+export const deletePost = (postId)=>{
+  request(`${API_BASE_URL}/posts/${postId}`,'DELETE',null,true)
+}
