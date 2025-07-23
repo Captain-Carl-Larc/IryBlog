@@ -1,43 +1,65 @@
 // src/components/Navbar.jsx
 
-import React from "react";
-// Link is used for client-side navigation without full page reloads.
-// useNavigate is a hook to programmatically navigate users.
+import React, { useState } from "react"; // Import useState for menu toggle
 import { Link, useNavigate } from "react-router-dom";
-// useAuth hook provides access to the authentication state and functions (login, logout, user).
 import { useAuth } from "../context/AuthContext";
 
 const Navbar = () => {
-  // Destructure necessary values from the authentication context.
   const { isAuthenticated, user, logout } = useAuth();
-  // Initialize useNavigate hook for redirection after logout.
   const navigate = useNavigate();
+  const [isOpen, setIsOpen] = useState(false); // State to manage mobile menu open/close
 
-  // Function to handle user logout.
   const handleLogout = () => {
-    logout(); // Call the logout function from AuthContext to clear state and localStorage.
-    navigate("/login"); // Redirect the user to the login page after logging out.
+    logout();
+    navigate("/login");
+    setIsOpen(false); // Close mobile menu on logout
+  };
+
+  const toggleMenu = () => {
+    setIsOpen(!isOpen); // Toggle the menu state
+  };
+
+  // Function to close menu when a link is clicked (useful for mobile)
+  const closeMenu = () => {
+    setIsOpen(false);
   };
 
   return (
-    // Navigation bar container with Tailwind CSS for styling.
-    // bg-blue-600: blue background
-    // p-4: padding
-    // shadow-md: medium shadow below the navbar
-    <nav className="bg-blue-600 shadow-md p-4">
-      {/* Container for content inside the navbar, centered and with flexbox for alignment. */}
+    <nav className="z-10 relative bg-blue-600 shadow-md p-4"> {/* Added relative and z-10 */}
       <div className="flex justify-between items-center mx-auto container">
         {/* Logo/Home Link */}
         <Link
-          to="/" // Navigates to the home page
+          to="/"
           className="rounded-md font-bold text-white hover:text-blue-100 text-2xl transition-colors duration-200"
+          onClick={closeMenu} // Close menu if logo is clicked
         >
           My Blog
         </Link>
 
-        {/* Navigation Links - displayed based on authentication status */}
-        <div className="flex space-x-4">
-          {/* Link to view all posts (accessible to all, but content might be protected) */}
+        {/* Hamburger Icon for Mobile */}
+        <div className="md:hidden"> {/* Visible only on small screens */}
+          <button
+            onClick={toggleMenu}
+            className="p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-white"
+            aria-label="Toggle navigation menu"
+          >
+            {isOpen ? (
+              // Close icon (X)
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
+              </svg>
+            ) : (
+              // Hamburger icon
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"></path>
+              </svg>
+            )}
+          </button>
+        </div>
+
+        {/* Desktop Navigation Links & Auth Buttons */}
+        {/* Hidden on small screens, flex on medium screens and up */}
+        <div className="hidden md:flex items-center md:space-x-4">
           <Link
             to="/"
             className="hover:bg-blue-700 px-3 py-2 rounded-md text-white transition-colors duration-200"
@@ -45,17 +67,14 @@ const Navbar = () => {
             All Posts
           </Link>
 
-          {/* Conditional rendering: Only show these links if the user is authenticated */}
           {isAuthenticated && (
             <>
-              {/* Link to the page for creating a new post */}
               <Link
                 to="/create-post"
                 className="hover:bg-blue-700 px-3 py-2 rounded-md text-white transition-colors duration-200"
               >
                 Create Post
               </Link>
-              {/* Link to view posts created by the logged-in user */}
               <Link
                 to="/my-posts"
                 className="hover:bg-blue-700 px-3 py-2 rounded-md text-white transition-colors duration-200"
@@ -64,25 +83,18 @@ const Navbar = () => {
               </Link>
             </>
           )}
-        </div>
 
-        {/* Authentication Buttons (Login/Register or User/Logout) */}
-        <div>
           {isAuthenticated ? (
-            // If authenticated, display user's username and a logout button
             <div className="flex items-center space-x-4">
-              <span className="text-white text-lg">
-                Hello, {user.username}!
-              </span>
+              <span className="text-white text-lg">Hello, {user?.username}!</span>
               <button
-                onClick={handleLogout} // Calls the logout function
+                onClick={handleLogout}
                 className="bg-red-500 hover:bg-red-600 shadow-md px-4 py-2 rounded-md text-white transition-colors duration-200"
               >
                 Logout
               </button>
             </div>
           ) : (
-            // If not authenticated, display login and register links
             <div className="flex space-x-4">
               <Link
                 to="/login"
@@ -97,6 +109,70 @@ const Navbar = () => {
                 Register
               </Link>
             </div>
+          )}
+        </div>
+      </div>
+
+      {/* Mobile Menu (Hidden by default, shown when isOpen is true) */}
+      {/* Absolute positioning to overlay content below, full width */}
+      <div
+        className={`md:hidden ${isOpen ? 'block' : 'hidden'} bg-blue-600 w-full absolute top-full left-0 shadow-lg pb-4`}
+      >
+        <div className="flex flex-col items-center space-y-4 pt-4">
+          <Link
+            to="/"
+            className="block hover:bg-blue-700 px-3 py-2 rounded-md w-full text-white text-center transition-colors duration-200"
+            onClick={closeMenu}
+          >
+            All Posts
+          </Link>
+
+          {isAuthenticated && (
+            <>
+              <Link
+                to="/create-post"
+                className="block hover:bg-blue-700 px-3 py-2 rounded-md w-full text-white text-center transition-colors duration-200"
+                onClick={closeMenu}
+              >
+                Create Post
+              </Link>
+              <Link
+                to="/my-posts"
+                className="block hover:bg-blue-700 px-3 py-2 rounded-md w-full text-white text-center transition-colors duration-200"
+                onClick={closeMenu}
+              >
+                My Posts
+              </Link>
+            </>
+          )}
+
+          {isAuthenticated ? (
+            <>
+              <span className="mt-4 text-white text-lg">Hello, {user?.username}!</span>
+              <button
+                onClick={handleLogout}
+                className="bg-red-500 hover:bg-red-600 shadow-md px-4 py-2 rounded-md w-11/12 text-white text-center transition-colors duration-200"
+              >
+                Logout
+              </button>
+            </>
+          ) : (
+            <>
+              <Link
+                to="/login"
+                className="bg-green-500 hover:bg-green-600 shadow-md px-4 py-2 rounded-md w-11/12 text-white text-center transition-colors duration-200"
+                onClick={closeMenu}
+              >
+                Login
+              </Link>
+              <Link
+                to="/register"
+                className="bg-purple-500 hover:bg-purple-600 shadow-md px-4 py-2 rounded-md w-11/12 text-white text-center transition-colors duration-200"
+                onClick={closeMenu}
+              >
+                Register
+              </Link>
+            </>
           )}
         </div>
       </div>
